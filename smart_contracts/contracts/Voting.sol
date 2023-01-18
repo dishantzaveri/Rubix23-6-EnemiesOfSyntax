@@ -3,35 +3,46 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract Voting{
+    
+    struct VotingSystem{
+        uint uniqueId;
+        string systemName;
+        uint numberOfCandidates;
+        string[] candidates;
+        uint votingPeriod;       
+    }
+
+    mapping (uint => mapping (string => uint)) public differentSystemVotes; 
+    mapping (uint => mapping (address => bool)) differentSystemVotingDone;
+    mapping (uint => VotingSystem) public systems; 
+
+    function createSystem(uint _uniqueId, string memory _systemName, uint _numberOfCandidates, string[] memory _candidates,uint numberOfDays) public   {
+        uint _votingPeriod = block.timestamp + (numberOfDays * 1 days);
+        VotingSystem memory system =  VotingSystem(_uniqueId,_systemName,_numberOfCandidates,_candidates,_votingPeriod);
+        systems[_uniqueId] = system;
+    }
+
     address payable owner;
     mapping (address => uint) votingDone;
-    enum Period{
-        LIVE,
-        END
-    }
-    Period public _period;
+  
     constructor() {
         owner = payable(msg.sender);
     }
 
-    function setPeriod(Period _status) public {
-        require(msg.sender == owner, "Not Authorized");
-        _period = _status;
-    }
 
     function showBalance() public view returns(uint) {
         return address(this).balance;
     }
 
-    function voteKarteRaho() public payable {
-        require(_period == Period.LIVE, "Voting is ended");
-        voteKaro();
+    function voteKarteRaho(uint _uniqueId,string memory _candidateName) public  {
+        voteKaro(_uniqueId,_candidateName);
     }
 
-    function voteKaro() internal{
-        require(votingDone[msg.sender] < 1, "You have voted already");
-        require(msg.value == 1 ether, "Please send 1 ether to vote");
-        votingDone[msg.sender] +=1;
+    function voteKaro(uint _uniqueId,string memory _candidateName) internal{
+        require(differentSystemVotingDone[_uniqueId][msg.sender]==false,"You have already Voted");
+        require(systems[_uniqueId].votingPeriod >= block.timestamp, "The voting time is Over!");
+        differentSystemVotes[_uniqueId][_candidateName] +=1;
+        differentSystemVotingDone[_uniqueId][msg.sender] = true;
     }
 
     function addMoneyToOwner() public payable{
