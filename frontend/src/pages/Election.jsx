@@ -2,11 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { VotingContext } from "../context";
 import Modal from "react-modal";
-
-import React, { useContext, useState } from "react";
-import { useEffect } from "react";
-import Navbar from "../components/Navbar";
-import { VotingContext } from "../context";
 import { ToastContainer, toast } from "react-toastify";
 const Election = () => {
   const { account, setTheAccount, connectingWithContract } =
@@ -38,6 +33,31 @@ const Election = () => {
   const [candidate, setCandidate] = useState("");
   const [checked, setChecked] = useState(false);
   const [modal, setModal] = useState(false);
+  const voteKaro = async () => {
+    if (!voters.includes(panNumber)) {
+      console.log("Not Authorized");
+      toast.error("Not Authorized to vote", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+    const contract = await connectingWithContract();
+    const response = await contract.voteKarteRaho(8, selected, panNumber);
+    console.log(response);
+  };
+
+  const getVotes = async () => {
+    const contract = await connectingWithContract();
+    const response = await contract.differentSystemVotes(8, "Yuvraj");
+    console.log(response);
+  };
   return (
     <div>
       <Navbar />
@@ -179,34 +199,7 @@ const Election = () => {
             </div>
           </div>
         </Modal>
-  const voteKaro = async () => {
-    if (!voters.includes(panNumber)) {
-      console.log("Not Authorized");
-      toast.error("Not Authorized to vote", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      return;
-    }
-    const contract = await connectingWithContract();
-    const response = await contract.voteKarteRaho(8, selected, panNumber);
-    console.log(response);
-  };
-
-  const getVotes = async () => {
-    const contract = await connectingWithContract();
-    const response = await contract.differentSystemVotes(8, "Yuvraj");
-    console.log(response);
-  };
-  return (
-    <div>
-      <Navbar />
+      </div>
       <ToastContainer />
       <div>
         {electionDetails?.length > 0 ? (

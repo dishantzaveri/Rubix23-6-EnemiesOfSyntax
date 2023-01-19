@@ -3,8 +3,30 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { VotingContext } from "../context";
 import homeImage from "../assets/home.svg";
+import axios from "axios";
 const Home = () => {
   const { account, setTheAccount } = useContext(VotingContext);
+  const options = {
+    method: "POST",
+    url: "https://pan-card-verification1.p.rapidapi.com/v3/tasks/sync/verify_with_source/ind_pan",
+    headers: {
+      "content-type": "application/json",
+      "X-RapidAPI-Key": "618b6ec4abmsh228074d51b65ea4p1f72d8jsn8883234e6b85",
+      "X-RapidAPI-Host": "pan-card-verification1.p.rapidapi.com",
+    },
+    data: '{"task_id":"74f4c926-250c-43ca-9c53-453e87ceacd1","group_id":"8e16424a-58fc-4ba4-ab20-5bc8e7c3c41e","data":{"id_number":"NNDPS4508E"}}',
+  };
+  useEffect(() => {
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, [])
+  
   useEffect(() => {
     console.log(account);
   }, [account]);
