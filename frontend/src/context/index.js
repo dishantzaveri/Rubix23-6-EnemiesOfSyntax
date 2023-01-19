@@ -1,4 +1,5 @@
 import ethers from "ethers";
+import { createContext, useState } from "react";
 import Web3Modal from "web3modal";
 
 import { VotingAppAddress, VotingAppABI } from "../constants";
@@ -47,4 +48,24 @@ export const connectingWithContract = async () => {
   } catch (e) {
     console.log(e);
   }
+};
+
+export const VotingContext = createContext();
+export const VotingProvider = ({ children }) => {
+  const [account, setAccount] = useState("");
+  const [systems, setSystems] = useState([]);
+  const [error, setError] = useState("");
+
+  const fetchData = async () => {
+    try {
+      const contract = await connectingWithContract();
+      const connectAcc = await connectWallet();
+      setAccount(connectAcc);
+    } catch (e) {
+      setError(e);
+      console.log(e);
+    }
+  };
+
+  return <VotingContext.Provider>{children}</VotingContext.Provider>;
 };
