@@ -4,6 +4,7 @@ import { VotingContext } from "../context";
 import Modal from "react-modal";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { Link } from "react-router-dom";
 const Election = () => {
   const { account, setTheAccount, connectingWithContract } =
     useContext(VotingContext);
@@ -15,17 +16,22 @@ const Election = () => {
   const [checked, setChecked] = useState(false);
   const [modal, setModal] = useState(false);
   const [canVote, setCanVote] = useState(false);
+  const [id, setId] = useState();
   useEffect(() => {
     getElectionDetails();
     // getVotes();
   }, []);
   const getElectionDetails = async () => {
     setTheAccount();
+    const url = window.location.href;
+    const urlArray = url.split("/");
+    const unique_id = urlArray[urlArray.length - 1];
+    setId(unique_id);
     const contract = await connectingWithContract();
-    const response = await contract.systems(8);
+    const response = await contract.systems(unique_id);
     console.log(response);
-    const candidates = await contract.getCandidates(8);
-    const voters = await contract.getVoters(8);
+    const candidates = await contract.getCandidates(unique_id);
+    const voters = await contract.getVoters(unique_id);
     console.log(candidates);
     console.log(voters);
     setAllCandidates(candidates);
@@ -35,8 +41,15 @@ const Election = () => {
   };
 
   const voteKaro = async () => {
+    const url = window.location.href;
+    const urlArray = url.split("/");
+    const unique_id = urlArray[urlArray.length - 1];
     const contract = await connectingWithContract();
-    const response = await contract.voteKarteRaho(8, candidate, panNumber);
+    const response = await contract.voteKarteRaho(
+      unique_id,
+      candidate,
+      panNumber
+    );
     console.log(response);
   };
 
@@ -61,7 +74,7 @@ const Election = () => {
       url: "https://pan-card-verification1.p.rapidapi.com/v3/tasks/sync/verify_with_source/ind_pan",
       headers: {
         "content-type": "application/json",
-        "X-RapidAPI-Key": "618b6ec4abmsh228074d51b65ea4p1f72d8jsn8883234e6b85",
+        "X-RapidAPI-Key": "15b6349dcemsh9d506902b260d0fp1b6792jsna64ed0116bd9",
         "X-RapidAPI-Host": "pan-card-verification1.p.rapidapi.com",
       },
       data: `{"task_id":"74f4c926-250c-43ca-9c53-453e87ceacd1","group_id":"8e16424a-58fc-4ba4-ab20-5bc8e7c3c41e","data":{"id_number":"${panNumber}"}}`,
@@ -82,7 +95,6 @@ const Election = () => {
           progress: undefined,
           theme: "light",
         });
-        voteKaro();
       })
       .catch(function (error) {
         console.error(error);
@@ -104,7 +116,16 @@ const Election = () => {
       <Navbar />
       <ToastContainer />
       <div className="w-full px-36 py-16 flex flex-col gap-6">
-        <h1 className="text-3xl font-bold">Voting panel</h1>
+        <div className="flex flex-row items-center justify-between">
+          <h1 className="text-3xl font-bold">Voting panel</h1>
+          <Link
+            to={`/results/${id}`}
+            className="text-white bg-[#015FC7] p-2 mt-8"
+          >
+            View Results
+          </Link>
+        </div>
+
         <h1 className="text-2xl font-semibold">{electionDetails.systemName}</h1>
         <div className="flex flex-row justify-between">
           <h1>
@@ -180,9 +201,9 @@ const Election = () => {
         </div>
         <button
           className={`${
-            checked ? "bg-blue-500" : "bg-gray-500"
+            checked && canVote ? "bg-blue-500" : "bg-gray-500"
           } text-white px-4 py-2 rounded`}
-          disabled={!checked && !canVote}
+          disabled={!(checked && canVote)}
           onClick={() => setModal(true)}
         >
           Vote
@@ -198,7 +219,10 @@ const Election = () => {
             <div className="flex gap-4 mt-4">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={() => setModal(false)}
+                onClick={() => {
+                  voteKaro();
+                  setModal(false);
+                }}
               >
                 Yes
               </button>

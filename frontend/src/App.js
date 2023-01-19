@@ -4,6 +4,7 @@ import AddElection from "./pages/AddElection";
 import Elections from "./pages/Elections";
 import Home from "./pages/Home";
 import Election from "./pages/Election";
+import Results from "./pages/Results";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/elections" element={<Elections />} />
-        {/* <Route path="/elections/:id" element={<Election />} /> */}
+        <Route path="/elections/:id" element={<Election />} />
+        <Route path="/results/:id" element={<Results />} />
         <Route path="/history" element={<History />} />
         <Route path="/add-election" element={<AddElection />} />
       </Routes>
