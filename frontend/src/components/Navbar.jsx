@@ -18,9 +18,6 @@ const Navbar = () => {
             History
           </h1>
         </Link>
-        <button className="text-white uppercase rounded-full px-6 py-2 bg-gradient-to-r from-cyan-400 to-blue-800 hover:to-cyan-600">
-          Login
-        </button>
       </div>
     </div>
   );
