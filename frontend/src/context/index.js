@@ -33,7 +33,7 @@ export const connectWallet = async () => {
 };
 
 const fetchContract = (signerOrProvider) => {
-  return new ethers.Contract(VotingAppABI, VotingAppAddress, signerOrProvider);
+  return new ethers.Contract(VotingAppAddress, VotingAppABI, signerOrProvider);
 };
 
 export const connectingWithContract = async () => {
@@ -53,19 +53,31 @@ export const connectingWithContract = async () => {
 export const VotingContext = createContext();
 export const VotingProvider = ({ children }) => {
   const [account, setAccount] = useState("");
+  const [myContract, setMyContract] = useState([]);
   const [systems, setSystems] = useState([]);
   const [error, setError] = useState("");
 
-  const fetchData = async () => {
+  const setTheAccount = async () => {
     try {
       const contract = await connectingWithContract();
       const connectAcc = await connectWallet();
       setAccount(connectAcc);
+      setMyContract(contract);
     } catch (e) {
       setError(e);
       console.log(e);
     }
   };
 
-  return <VotingContext.Provider>{children}</VotingContext.Provider>;
+  return (
+    <VotingContext.Provider
+      value={{
+        account,
+        setTheAccount,
+        myContract,
+      }}
+    >
+      {children}
+    </VotingContext.Provider>
+  );
 };

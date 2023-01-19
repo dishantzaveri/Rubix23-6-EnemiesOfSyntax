@@ -5,7 +5,6 @@ import Elections from "./pages/Elections";
 import Home from "./pages/Home";
 import Election from "./pages/Election";
 
-
 function App() {
   return (
     <>
