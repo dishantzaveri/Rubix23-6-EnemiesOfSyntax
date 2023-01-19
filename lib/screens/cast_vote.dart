@@ -184,7 +184,7 @@ class _CastVoteState extends State<CastVote> {
                                 ),
                               ),
                               actions: <Widget>[
-                                FlatButton(
+                                TextButton(
                                   child: Text("No"),
                                   onPressed: () {
                                     Get.back();

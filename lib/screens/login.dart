@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 30.0,
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => Get.to(AuthScreen()),
                 child: Text(
                   'Dont have an account ? Sign up there',

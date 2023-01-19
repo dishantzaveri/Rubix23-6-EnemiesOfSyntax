@@ -159,8 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [Colors.indigo, Colors.blue])),
-                  child: FlatButton.icon(
-                      height: 40.0,
+                  child: TextButton.icon(
+                      // height: 40.0,
                       onPressed: () async {
                         FirebaseFirestore _firestore =
                             FirebaseFirestore.instance;

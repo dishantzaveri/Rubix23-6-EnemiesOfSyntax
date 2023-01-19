@@ -107,7 +107,7 @@ class NewVote extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.indigo[400],
                   borderRadius: BorderRadius.circular(18.0)),
-              child: FlatButton.icon(
+              child: TextButton.icon(
                 label: Text(
                   'Continue',
                   style: TextStyle(fontSize: 22.0, color: Colors.white),

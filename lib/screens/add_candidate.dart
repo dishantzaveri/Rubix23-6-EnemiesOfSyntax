@@ -128,7 +128,7 @@ class _AddCandidateState extends State<AddCandidate> {
             decoration: BoxDecoration(
                 color: Colors.indigo,
                 borderRadius: BorderRadius.circular(10.0)),
-            child: FlatButton.icon(
+            child: TextButton.icon(
                 onPressed: () {
                   Get.to(VoteDashboard(),
                       arguments: Get.arguments,
