@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { VotingContext } from "../context";
 import Modal from "react-modal";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 const Election = () => {
   const { account, setTheAccount, connectingWithContract } =
     useContext(VotingContext);
@@ -10,10 +11,13 @@ const Election = () => {
   const [voters, setVoters] = useState([]);
   const [electionDetails, setElectionDetails] = useState([]);
   const [panNumber, setPanNumber] = useState("");
-  const [selected, setSelected] = useState("");
+  const [candidate, setCandidate] = useState("");
+  const [checked, setChecked] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [canVote, setCanVote] = useState(false);
   useEffect(() => {
     getElectionDetails();
-    getVotes();
+    // getVotes();
   }, []);
   const getElectionDetails = async () => {
     setTheAccount();
@@ -29,11 +33,14 @@ const Election = () => {
     setElectionDetails(response);
     console.log(parseInt(response.numberOfCandidates._hex));
   };
-  const [open, setOpen] = useState("");
-  const [candidate, setCandidate] = useState("");
-  const [checked, setChecked] = useState(false);
-  const [modal, setModal] = useState(false);
+
   const voteKaro = async () => {
+    const contract = await connectingWithContract();
+    const response = await contract.voteKarteRaho(8, candidate, panNumber);
+    console.log(response);
+  };
+
+  const verifyPan = async () => {
     if (!voters.includes(panNumber)) {
       console.log("Not Authorized");
       toast.error("Not Authorized to vote", {
@@ -48,108 +55,113 @@ const Election = () => {
       });
       return;
     }
-    const contract = await connectingWithContract();
-    const response = await contract.voteKarteRaho(8, selected, panNumber);
-    console.log(response);
+    console.log(panNumber);
+    const options = {
+      method: "POST",
+      url: "https://pan-card-verification1.p.rapidapi.com/v3/tasks/sync/verify_with_source/ind_pan",
+      headers: {
+        "content-type": "application/json",
+        "X-RapidAPI-Key": "618b6ec4abmsh228074d51b65ea4p1f72d8jsn8883234e6b85",
+        "X-RapidAPI-Host": "pan-card-verification1.p.rapidapi.com",
+      },
+      data: `{"task_id":"74f4c926-250c-43ca-9c53-453e87ceacd1","group_id":"8e16424a-58fc-4ba4-ab20-5bc8e7c3c41e","data":{"id_number":"${panNumber}"}}`,
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+        setCanVote(true);
+        toast.success("Pan number verified", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        voteKaro();
+      })
+      .catch(function (error) {
+        console.error(error);
+        toast.error("Pan number not verified", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
   };
 
-  const getVotes = async () => {
-    const contract = await connectingWithContract();
-    const response = await contract.differentSystemVotes(8, "Yuvraj");
-    console.log(response);
-  };
   return (
     <div>
       <Navbar />
+      <ToastContainer />
       <div className="w-full px-36 py-16 flex flex-col gap-6">
-        <h1 className="text-3xl font-semibold">Voting panel</h1>
-        <div
-          className="flex flex-col items-center"
-          onMouseEnter={() => setOpen("Narendra Modi")}
-          onMouseLeave={() => setOpen("")}
-        >
-          <div className="w-full grid grid-cols-12 px-6 py-4 bg-gray-50 border rounded">
-            <input
-              className="cols-span-1"
-              type="radio"
-              name="candidate"
-              id=""
-              checked={candidate === "Narendra Modi"}
-              onChange={() => setCandidate("Narendra Modi")}
-            />
-            <h1 className="text-lg col-span-5">Narendra Modi</h1>
-            <h1 className="text-lg col-span-5">BJP</h1>
-            <h1 className="text-lg col-span-1 text-end">></h1>
-          </div>
-          <div
-            className={`${
-              open !== "Narendra Modi" ? "hidden" : ""
-            } w-[90%] py-6 px-12 border`}
-          >
-            <h1 className="text-lg">Name: Narendra Modi</h1>
-            <h1 className="text-lg">Party: BJP</h1>
-            <h1 className="text-lg">Age: 70</h1>
-            <h1 className="text-lg">Education: M.A. in Political Science</h1>
-          </div>
+        <h1 className="text-3xl font-bold">Voting panel</h1>
+        <h1 className="text-2xl font-semibold">{electionDetails.systemName}</h1>
+        <div className="flex flex-row justify-between">
+          <h1>
+            Number of Candidates:{" "}
+            {parseInt(electionDetails.numberOfCandidates?._hex)}
+          </h1>
+          <h1>Election Held By: {electionDetails.electionHelderName}</h1>
+          <h1>
+            Time Till:{" "}
+            {new Date(
+              parseInt(electionDetails?.votingPeriod?._hex) * 1000
+            ).getDate() +
+              "-" +
+              parseInt(
+                new Date(
+                  parseInt(electionDetails?.votingPeriod?._hex) * 1000
+                ).getUTCMonth() + 1
+              ) +
+              "-" +
+              new Date(
+                parseInt(electionDetails?.votingPeriod?._hex) * 1000
+              ).getFullYear()}
+          </h1>
         </div>
-        <div
-          className="flex flex-col items-center"
-          onMouseEnter={() => setOpen("Rahul Gandhi")}
-          onMouseLeave={() => setOpen("")}
-        >
-          <div className="w-full grid grid-cols-12 px-6 py-4 bg-gray-50 border rounded">
-            <input
-              className="cols-span-1"
-              type="radio"
-              name="candidate"
-              id=""
-              checked={candidate === "Rahul Gandhi"}
-              onChange={() => setCandidate("Rahul Gandhi")}
-            />
-            <h1 className="text-lg col-span-5">Rahul Gandhi</h1>
-            <h1 className="text-lg col-span-5">Congress</h1>
-            <h1 className="text-lg col-span-1 text-end">></h1>
-          </div>
-          <div
-            className={`${
-              open !== "Rahul Gandhi" ? "hidden" : ""
-            } w-[90%] py-6 px-12 border`}
-          >
-            <h1 className="text-lg">Name: Rahul Gandhi</h1>
-            <h1 className="text-lg">Party: Congress</h1>
-            <h1 className="text-lg">Age: 70</h1>
-            <h1 className="text-lg">Education: M.A. in Political Science</h1>
-          </div>
+        <div>
+          <input
+            placeholder="Enter PAN number"
+            value={panNumber}
+            onChange={(e) => {
+              setPanNumber(e.target.value);
+            }}
+          />
+          <button onClick={() => verifyPan()}>Verify Pan</button>
         </div>
-        <div
-          className="flex flex-col items-center"
-          onMouseEnter={() => setOpen("Arvind Kejriwal")}
-          onMouseLeave={() => setOpen("")}
-        >
-          <div className="w-full grid grid-cols-12 px-6 py-4 bg-gray-50 border rounded">
-            <input
-              className="cols-span-1"
-              type="radio"
-              name="candidate"
-              id=""
-              checked={candidate === "Arvind Kejriwal"}
-              onChange={() => setCandidate("Arvind Kejriwal")}
-            />
-            <h1 className="text-lg col-span-5">Arvind Kejriwal</h1>
-            <h1 className="text-lg col-span-5">AAP</h1>
-            <h1 className="text-lg col-span-1 text-end">></h1>
-          </div>
-          <div
-            className={`${
-              open !== "Arvind Kejriwal" ? "hidden" : ""
-            } w-[90%] py-6 px-12 border`}
-          >
-            <h1 className="text-lg">Name: Arvind Kejriwal</h1>
-            <h1 className="text-lg">Party: AAP</h1>
-            <h1 className="text-lg">Age: 70</h1>
-            <h1 className="text-lg">Education: M.A. in Political Science</h1>
-          </div>
-        </div>
+        {electionDetails?.length > 0 ? (
+          allCandidates.map((c) => {
+            return (
+              <div className="flex flex-col items-center">
+                <div className="w-full grid grid-cols-12 px-6 py-4 bg-gray-50 border rounded">
+                  <input
+                    className="cols-span-1"
+                    type="radio"
+                    name="candidate"
+                    id=""
+                    checked={candidate === c}
+                    onChange={() => setCandidate(c)}
+                  />
+                  <h1 className="text-lg col-span-5">{c}</h1>
+                  <h1 className="text-lg col-span-6 text-end">></h1>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <h1>Loading</h1>
+        )}
+
         <div className="flex gap-4">
           {candidate ? (
             <>
@@ -170,7 +182,7 @@ const Election = () => {
           className={`${
             checked ? "bg-blue-500" : "bg-gray-500"
           } text-white px-4 py-2 rounded`}
-          disabled={!checked}
+          disabled={!checked && !canVote}
           onClick={() => setModal(true)}
         >
           Vote
@@ -200,6 +212,37 @@ const Election = () => {
           </div>
         </Modal>
       </div>
+    </div>
+  );
+  {
+    /* const voteKaro = async () => {
+    if (!voters.includes(panNumber)) {
+      console.log("Not Authorized");
+      toast.error("Not Authorized to vote", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+    const contract = await connectingWithContract();
+    const response = await contract.voteKarteRaho(8, selected, panNumber);
+    console.log(response);
+  };
+
+  const getVotes = async () => {
+    const contract = await connectingWithContract();
+    const response = await contract.differentSystemVotes(8, "Yuvraj");
+    console.log(response);
+  };
+  return (
+    <div>
+      <Navbar />
       <ToastContainer />
       <div>
         {electionDetails?.length > 0 ? (
@@ -256,8 +299,8 @@ const Election = () => {
           <h1>Loading...</h1>
         )}
       </div>
-    </div>
-  );
+    </div> */
+  }
 };
 
 export default Election;
