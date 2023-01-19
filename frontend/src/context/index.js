@@ -59,10 +59,8 @@ export const VotingProvider = ({ children }) => {
 
   const setTheAccount = async () => {
     try {
-      const contract = await connectingWithContract();
       const connectAcc = await connectWallet();
       setAccount(connectAcc);
-      setMyContract(contract);
     } catch (e) {
       setError(e);
       console.log(e);
@@ -74,7 +72,7 @@ export const VotingProvider = ({ children }) => {
       value={{
         account,
         setTheAccount,
-        myContract,
+        connectingWithContract,
       }}
     >
       {children}
