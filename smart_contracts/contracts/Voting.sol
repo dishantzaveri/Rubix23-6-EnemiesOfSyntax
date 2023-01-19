@@ -57,6 +57,14 @@ contract Voting{
         differentSystemVotingDone[_uniqueId][msg.sender] = true;
     }
 
+    function getCandidates(uint _uniqueId) public view returns (string[] memory)  {
+        return systems[_uniqueId].candidates;
+    }
+
+    function getVoters(uint _uniqueId) public view returns (string[] memory)  {
+        return systems[_uniqueId].votersForElection;
+    }
+
     function addMoneyToOwner() public payable{
         require(msg.sender == owner, "Not Authorized");
         payable(msg.sender).transfer(1 ether);
