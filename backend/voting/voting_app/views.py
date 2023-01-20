@@ -22,10 +22,16 @@ from rest_framework.response import Response
 #         election = serializer.save()
 #         return Response(serializer.data)
 
-class ElectionsView(ListCreateAPIView):
+class OpenElectionsView(ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
-    queryset = Election.objects.all()
+    queryset = OpenElection.objects.all()
+    serializer_class = ElectionSerializer
+
+class ClosedElectionsView(ListCreateAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    queryset = ClosedElection.objects.all()
     serializer_class = ElectionSerializer
 
 class OpenCandidateViewSet(viewsets.ModelViewSet):

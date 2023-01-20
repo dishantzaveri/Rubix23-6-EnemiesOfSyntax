@@ -4,7 +4,7 @@ from .models import *
 class ElectionSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Election
+        model = OpenElection
         fields = '__all__'
 
 class CandidateSerializer(serializers.ModelSerializer):

@@ -8,6 +8,7 @@ router.register(r'closedcandidate', views.ClosedCandidateViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('election/', views.ElectionsView.as_view(), name = 'Election'),
+    path('openelection/', views.OpenElectionsView.as_view(), name = 'Open Election'),
+    path('closedelection/', views.ClosedElectionsView.as_view(), name = 'Closed Election'),
 
 ]
