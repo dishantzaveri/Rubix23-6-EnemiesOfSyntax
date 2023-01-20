@@ -67,7 +67,7 @@ const Elections = () => {
       <Navbar />
       <div className="w-full px-36 py-16 flex flex-col gap-6">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-semibold">Ongoing Elections</h1>
+          <h1 className="text-3xl font-semibold text-black">Close Elections</h1>
           {localStorage.getItem("status")?.length > 0 ? (
             localStorage.getItem("status") === "helder" ? (
               <Link to="/add-election">
