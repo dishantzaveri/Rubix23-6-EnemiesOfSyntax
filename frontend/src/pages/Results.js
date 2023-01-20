@@ -76,13 +76,13 @@ const Results = () => {
     <div>
       <Navbar />
       <div className="w-full px-36 py-16">
-        <h1 className="text-3xl font-bold">Poll Results:</h1>
+        <h1 className="text-3xl font-bold text-black">Poll Results:</h1>
         {votes?.length > 0 ? (
           <div>
             {votes.map((v, index) => (
               <div key={index} className="flex flex-row mt-2">
-                <h1 className="text-xl">{candidates[index]}: </h1>
-                <h1 className="text-xl font-semibold"> {v}</h1>
+                <h1 className="text-xl text-black">{candidates[index]}: </h1>
+                <h1 className="text-xl font-semibold text-black"> {v}</h1>
               </div>
             ))}
             <Bar options={options} data={data} />

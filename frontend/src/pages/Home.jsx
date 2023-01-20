@@ -25,8 +25,8 @@ const Home = () => {
       .catch(function (error) {
         console.error(error);
       });
-  }, [])
-  
+  }, []);
+
   useEffect(() => {
     console.log(account);
   }, [account]);
@@ -48,12 +48,18 @@ const Home = () => {
               </h1>
               <div className="flex flex-row justify-evenly">
                 <Link
+                  onClick={() => {
+                    localStorage.setItem("status", "helder");
+                  }}
                   to="/add-election"
                   className="text-white bg-[#015FC7] p-2 mt-4 w-[150px] text-center"
                 >
-                  <h1 className="">Hold an Election</h1>
+                  <h1 className="text-black">Hold an Election</h1>
                 </Link>
                 <Link
+                  onClick={() => {
+                    localStorage.setItem("status", "voter");
+                  }}
                   to="/elections"
                   className="text-white bg-[#015FC7] p-2 mt-4 w-[150px] text-center"
                 >
@@ -82,20 +88,26 @@ const Home = () => {
         </div>
       </div>
       <div className="flex w-full px-36 py-24 bg-white">
-        <h1 className="text-5xl font-semibold -rotate-90">Features</h1>
+        <h1 className="text-5xl font-semibold -rotate-90 text-black">
+          Features
+        </h1>
         <div className="border-l-4 border-blue-700 ml-[-160px] flex flex-col gap-4 pl-12">
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-xl font-semibold text-black">
             Secured by 256 bit encryption
           </h1>
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-xl font-semibold text-black">
             Backed by ethereum based technology
           </h1>
-          <h1 className="text-xl font-semibold">Verifiable transactions</h1>
-          <h1 className="text-xl font-semibold">Easy to use</h1>
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-xl font-semibold text-black">
+            Verifiable transactions
+          </h1>
+          <h1 className="text-xl font-semibold text-black">Easy to use</h1>
+          <h1 className="text-xl font-semibold text-black ">
             Cheaper than ballot voting system
           </h1>
-          <h1 className="text-xl font-semibold">Faster voting process</h1>
+          <h1 className="text-xl font-semibold text-black">
+            Faster voting process
+          </h1>
         </div>
       </div>
       <div className="flex w-full px-36 py-24 text-white">
@@ -114,17 +126,21 @@ const Home = () => {
         </div>
       </div>
       <div className="w-full px-36 py-24 bg-white">
-        <h1 className="text-5xl font-semibold underline decoration-blue-500 mb-12">Follow these easy steps</h1>
+        <h1 className="text-5xl font-semibold underline decoration-blue-500 mb-12 text-black">
+          Follow these easy steps
+        </h1>
         <div className="flex flex-col gap-4">
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-xl font-semibold text-black">
             Register yourself by filling the required details
           </h1>
-          <h1 className="text-xl font-semibold">
-            Signin as user
+          <h1 className="text-xl font-semibold text-black">Signin as user</h1>
+          <h1 className="text-xl font-semibold text-black">
+            Go to vote option on dashboard
           </h1>
-          <h1 className="text-xl font-semibold">Go to vote option on dashboard</h1>
-          <h1 className="text-xl font-semibold">Give security key</h1>
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-xl font-semibold text-black">
+            Give security key
+          </h1>
+          <h1 className="text-xl font-semibold text-black">
             Vote your candidate and submit
           </h1>
         </div>

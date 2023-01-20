@@ -5,6 +5,9 @@ import Elections from "./pages/Elections";
 import Home from "./pages/Home";
 import Election from "./pages/Election";
 import Results from "./pages/Results";
+import Contact from "./pages/Contact";
+import HowToUse from "./pages/HowToUse";
+import News from "./pages/News";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/results/:id" element={<Results />} />
         <Route path="/history" element={<History />} />
         <Route path="/add-election" element={<AddElection />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/how-to-use" element={<HowToUse />} />
+        <Route path="/news" element={<News />} />
       </Routes>
     </>
   );

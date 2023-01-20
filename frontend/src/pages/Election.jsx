@@ -88,7 +88,7 @@ const Election = () => {
       url: "https://pan-card-verification1.p.rapidapi.com/v3/tasks/sync/verify_with_source/ind_pan",
       headers: {
         "content-type": "application/json",
-        "X-RapidAPI-Key": "15b6349dcemsh9d506902b260d0fp1b6792jsna64ed0116bd9",
+        "X-RapidAPI-Key": "aeeaf0c4ffmsh8d2e448618a749cp1497acjsnf52c97a559d3",
         "X-RapidAPI-Host": "pan-card-verification1.p.rapidapi.com",
       },
       data: `{"task_id":"74f4c926-250c-43ca-9c53-453e87ceacd1","group_id":"8e16424a-58fc-4ba4-ab20-5bc8e7c3c41e","data":{"id_number":"${panNumber}"}}`,
@@ -131,7 +131,7 @@ const Election = () => {
       <ToastContainer />
       <div className="w-full px-36 py-16 flex flex-col gap-6">
         <div className="flex flex-row items-center justify-between">
-          <h1 className="text-3xl font-bold">Voting panel</h1>
+          <h1 className="text-3xl font-bold text-black">Voting panel</h1>
           <Link
             to={`/results/${id}`}
             className="text-white bg-[#015FC7] p-2 mt-8"
@@ -142,12 +142,14 @@ const Election = () => {
 
         <h1 className="text-2xl font-semibold">{electionDetails.systemName}</h1>
         <div className="flex flex-row justify-between">
-          <h1>
+          <h1 className="text-black">
             Number of Candidates:{" "}
             {parseInt(electionDetails.numberOfCandidates?._hex)}
           </h1>
-          <h1>Election Held By: {electionDetails.electionHelderName}</h1>
-          <h1>
+          <h1 className="text-black">
+            Election Held By: {electionDetails.electionHelderName}
+          </h1>
+          <h1 className="text-black">
             Time Till:{" "}
             {new Date(
               parseInt(electionDetails?.votingPeriod?._hex) * 1000
@@ -187,7 +189,7 @@ const Election = () => {
                     checked={candidate === c}
                     onChange={() => setCandidate(c)}
                   />
-                  <h1 className="text-lg col-span-5">{c}</h1>
+                  <h1 className="text-lg col-span-5 text-black">{c}</h1>
                   <h1 className="text-lg col-span-6 text-end">></h1>
                 </div>
               </div>
@@ -207,10 +209,12 @@ const Election = () => {
                 checked={checked}
                 onClick={() => setChecked((prev) => !prev)}
               />
-              <h1>I have selected {candidate} as my candidate</h1>
+              <h1 className="text-black">
+                I have selected {candidate} as my candidate
+              </h1>
             </>
           ) : (
-            <h1 className="text-red-500">Please select a candidate</h1>
+            <h1 className="text-red-500 ">Please select a candidate</h1>
           )}
         </div>
         <button
