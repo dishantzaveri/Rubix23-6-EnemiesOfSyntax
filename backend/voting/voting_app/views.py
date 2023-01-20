@@ -28,13 +28,28 @@ class ElectionsView(ListCreateAPIView):
     queryset = Election.objects.all()
     serializer_class = ElectionSerializer
 
-class CandidateViewSet(viewsets.ModelViewSet):
-    queryset = Candidate.objects.all()
+class OpenCandidateViewSet(viewsets.ModelViewSet):
+    queryset = OpenCandidate.objects.all()
     serializer_class = CandidateSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        return Candidate.objects.all()
+        return OpenCandidate.objects.all()
+
+    # def perform_create(self,serializer):
+    #     serializer.save(organiser = self.request.user)
+        
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
+class ClosedCandidateViewSet(viewsets.ModelViewSet):
+    queryset = ClosedCandidate.objects.all()
+    serializer_class = CandidateSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return ClosedCandidate.objects.all()
 
     # def perform_create(self,serializer):
     #     serializer.save(organiser = self.request.user)

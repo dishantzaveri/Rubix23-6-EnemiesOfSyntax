@@ -3,4 +3,5 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Election)
-admin.site.register(Candidate)
+admin.site.register(OpenCandidate)
+admin.site.register(ClosedCandidate)

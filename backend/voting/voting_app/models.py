@@ -13,7 +13,15 @@ def pan_validator(value):
 class Election(models.Model):
     election_name = models.CharField(max_length=255)
 
-class Candidate(models.Model):
+class OpenCandidate(models.Model):
+    election = models.ForeignKey(Election,on_delete = models.CASCADE)
+    name = models.CharField(max_length=255)
+    pan = models.CharField(max_length=10, validators=[pan_validator])
+    party  = models.CharField(max_length=255)
+    age = models.PositiveIntegerField()
+    is_accepted = models.BooleanField(default=False)
+
+class ClosedCandidate(models.Model):
     election = models.ForeignKey(Election,on_delete = models.CASCADE)
     name = models.CharField(max_length=255)
     pan = models.CharField(max_length=10, validators=[pan_validator])

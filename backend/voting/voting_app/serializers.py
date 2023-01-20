@@ -10,5 +10,5 @@ class ElectionSerializer(serializers.ModelSerializer):
 class CandidateSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Candidate
+        model = OpenCandidate
         fields = '__all__'
