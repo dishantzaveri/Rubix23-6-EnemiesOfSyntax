@@ -20,12 +20,12 @@ class OpenCandidate(models.Model):
     election = models.ForeignKey(OpenElection,on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     pan = models.CharField(max_length=10, validators=[pan_validator])
-    organization  = models.CharField(max_length=255)
+    party  = models.CharField(max_length=255)
     age = models.PositiveIntegerField()
 
 class ClosedCandidate(models.Model):
     election = models.ForeignKey(ClosedElection,on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     pan = models.CharField(max_length=10, validators=[pan_validator])
-    organization  = models.CharField(max_length=255)
+    party  = models.CharField(max_length=255)
     age = models.PositiveIntegerField()
