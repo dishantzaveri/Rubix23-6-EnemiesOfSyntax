@@ -16,6 +16,7 @@ contract Voting{
 
     mapping (uint => mapping (string => uint)) public differentSystemVotes; 
     mapping (uint => mapping (address => bool)) differentSystemVotingDone;
+    mapping (uint => mapping (string => bool)) differentPanCardsVoting;
     mapping (uint => VotingSystem) public systems; 
 
     function createSystem(uint _uniqueId, string memory _systemName, uint _numberOfCandidates, string[] memory _candidates,uint numberOfDays,string[] memory _votersForElection, string memory _electionHelderName) public   {
@@ -52,9 +53,11 @@ contract Voting{
     function voteKaro(uint _uniqueId,string memory _candidateName,string memory _candidateAadhar) internal{
         require(checkIfUserExists(_uniqueId, _candidateAadhar),"You are not Authorized to Vote");
         require(differentSystemVotingDone[_uniqueId][msg.sender]==false,"You have already Voted");
+        require(differentPanCardsVoting[_uniqueId][_candidateAadhar]==false,"You have already Voted");
         require(systems[_uniqueId].votingPeriod >= block.timestamp, "The voting time is Over!");
         differentSystemVotes[_uniqueId][_candidateName] +=1;
         differentSystemVotingDone[_uniqueId][msg.sender] = true;
+        differentPanCardsVoting[_uniqueId][_candidateAadhar]=true;
     }
 
     function getCandidates(uint _uniqueId) public view returns (string[] memory)  {
