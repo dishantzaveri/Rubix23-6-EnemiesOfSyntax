@@ -44,13 +44,27 @@ const Election = () => {
     const url = window.location.href;
     const urlArray = url.split("/");
     const unique_id = urlArray[urlArray.length - 1];
-    const contract = await connectingWithContract();
-    const response = await contract.voteKarteRaho(
-      unique_id,
-      candidate,
-      panNumber
-    );
-    console.log(response);
+    try {
+      const contract = await connectingWithContract();
+      const response = await contract.voteKarteRaho(
+        unique_id,
+        candidate,
+        panNumber
+      );
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+      toast.error("You have already voted", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
 
   const verifyPan = async () => {
