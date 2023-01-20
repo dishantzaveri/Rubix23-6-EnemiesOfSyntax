@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from .serializers import *
-from rest_framework import status,permissions
+from rest_framework import status,permissions,viewsets
 from rest_framework.response import Response
 
 # Create your views here.
@@ -27,3 +27,18 @@ class ElectionsView(ListCreateAPIView):
 
     queryset = Election.objects.all()
     serializer_class = ElectionSerializer
+
+class CandidateViewSet(viewsets.ModelViewSet):
+    queryset = Candidate.objects.all()
+    serializer_class = CandidateSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return Candidate.objects.all()
+
+    # def perform_create(self,serializer):
+    #     serializer.save(organiser = self.request.user)
+        
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
