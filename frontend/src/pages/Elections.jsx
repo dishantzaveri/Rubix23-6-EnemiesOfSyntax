@@ -17,7 +17,7 @@ const Election = ({ election }) => {
     setTheAccount();
     const unique_id = election?.id;
     const contract = await connectingWithContract();
-    const response = await contract.systems(unique_id);
+    const response = await contract.systems(unique_id); 
     console.log(response);
     if (new Date(parseInt(response?.votingPeriod?._hex) * 1000) >= new Date()) {
       setStatus("live");
@@ -25,7 +25,7 @@ const Election = ({ election }) => {
   };
   return (
     <Link
-      to={`/elections/${election.id}`}
+      to={`/results/${election.id}`}
       className="w-full px-6 py-4 grid grid-cols-12 border rounded hover:shadow-lg mt-2"
     >
       <h1 className="text-gray-400 col-span-1">{election.id}</h1>
