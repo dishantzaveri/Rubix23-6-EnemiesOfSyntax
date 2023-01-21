@@ -26,17 +26,17 @@ class OpenElectionsView(ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
     queryset = OpenElection.objects.all()
-    serializer_class = ElectionSerializer
+    serializer_class = OpenElectionSerializer
 
 class ClosedElectionsView(ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
     queryset = ClosedElection.objects.all()
-    serializer_class = ElectionSerializer
+    serializer_class = ClosedElectionSerializer
 
 class OpenCandidateViewSet(viewsets.ModelViewSet):
     queryset = OpenCandidate.objects.all()
-    serializer_class = CandidateSerializer
+    serializer_class = OpenCandidateSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
@@ -51,7 +51,7 @@ class OpenCandidateViewSet(viewsets.ModelViewSet):
 
 class ClosedCandidateViewSet(viewsets.ModelViewSet):
     queryset = ClosedCandidate.objects.all()
-    serializer_class = CandidateSerializer
+    serializer_class = ClosedCandidateSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
